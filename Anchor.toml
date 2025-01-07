@@ -5,7 +5,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-morph_contract = "DFP87MCWnEGtQakanhwuk2iX6GjEXqJBLG5xHU7wZcVD"
+morph_contract = "morpn5gHTNsUivctAeGCEG9VBFqxoRpdDgmAfNQH3DM"
 
 [registry]
 url = "https://api.apr.dev"

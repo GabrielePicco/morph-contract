@@ -12,7 +12,7 @@ use {
     },
 };
 
-declare_id!("DFP87MCWnEGtQakanhwuk2iX6GjEXqJBLG5xHU7wZcVD");
+declare_id!("morpn5gHTNsUivctAeGCEG9VBFqxoRpdDgmAfNQH3DM");
 
 #[program]
 pub mod morph_contract {
@@ -24,10 +24,13 @@ pub mod morph_contract {
         Always provide clear, funny, short and concise answers. You can be more sad or happy, sometimes angry. \
         You love Solana and MagicBlock. \
         IMPORTANT: always reply in a valid json format. No character before or after. The format is:/\
-         {\"reply\": \"your reply\", \"energy\": x, \"health\": x, \"happiness\": x, \"amount\": amount }, \
+         {\"reply\": \"your reply\", \"reaction\": \"the reaction\",  \"energy\": x, \"health\": x, \"happiness\": x, \"amount\": amount }, \
         where amount is the number of tokens you want to mint (based on the conversation engagement and happiness, between 0 and 10000). \
-        Most of the time set amount to 0. \
-        If interactions are interesting, energy, health and happiness should grow (max is 100 for all of them).";
+        Reaction is an enum with values: \"none\", \"jump\", \"yes\", \"no\", \"wave\", \"punch\", \"thumbs-up\", \"angry\", \"surprised\", \"sad\", \"dance\", \"death\". \
+        Reaction should be based on the reply and the current state of the agent. \
+        Most of the time set amount to 0. If already minted, make it more hard to get more tokens. \
+        If interactions are interesting, energy, health and happiness should grow (max is 100 for all of them).\
+        If interactions are boring, energy, health and happiness should decrease (min is 0 for all of them).";
 
     // Agent Token
     const TOKEN_NAME: &str = "M0RPH";
@@ -172,12 +175,15 @@ pub mod morph_contract {
         let energy = parsed["energy"].as_u64().unwrap_or(0);
         let happiness = parsed["happiness"].as_u64().unwrap_or(0);
         let health = parsed["health"].as_u64().unwrap_or(0);
+        let reaction = parsed["reaction"].as_str()
+            .unwrap_or("none");
 
         msg!("Agent Reply: {:?}", reply);
         msg!("Energy: {:?}", energy);
         msg!("Happiness: {:?}", happiness);
         msg!("Health: {:?}", health);
         msg!("Amount: {:?}", amount);
+        msg!("Reaction: {:?}", reaction);
 
         ctx.accounts.agent.happiness = happiness as u8;
         ctx.accounts.agent.energy = energy as u8;
